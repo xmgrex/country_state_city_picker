@@ -6,7 +6,6 @@ import 'package:country_state_city_picker/src/japan_state_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:country_state_city_picker/src/models.dart' as status_model;
 
 class SelectJapanState extends StatefulWidget {
   final ValueChanged<String> onStateChanged;
@@ -38,11 +37,10 @@ class SelectJapanState extends StatefulWidget {
 }
 
 class _SelectJapanStateState extends State<SelectJapanState> {
-  List<City> _cities = [];
-  late City _selectedCity;
-  late JapanStataModel _selectedState;
-  List<JapanStataModel> _states = [];
-  var responses;
+  List<City> _cities = [const City(citycode: 'Choose City', city: 'Choose City')];
+  var _selectedCity  = const City(citycode: 'Choose City', city: 'Choose City');
+  var _selectedState = const JapanStataModel(name: 'Choose State/Province');
+  final List<JapanStataModel> _states = [const JapanStataModel(name: 'Choose State/Province')];
 
   @override
   void initState() {
@@ -50,41 +48,36 @@ class _SelectJapanStateState extends State<SelectJapanState> {
     super.initState();
   }
 
-  Future getResponse() async {
+  Future<List<dynamic>> getResponse() async {
     var res = await rootBundle.loadString(
         'packages/country_state_city_picker/lib/assets/japan_state_city.json');
     return jsonDecode(res);
   }
 
   Future getState() async {
-    var takestate = await getResponse() as List;
+    var takestate = await getResponse();
     for (var f in takestate) {
       if (!mounted) continue;
       setState(() {
-        const state = JapanStataModel(name: 'Choose State/Province');
-        _selectedState = state;
-        _states = f.map((item) => JapanStataModel.fromMap(item)).toList();
+        _states.add(JapanStataModel.fromMap(f));
       });
     }
 
     return _states;
   }
 
-  Future getCity(JapanStataModel value) async {
+  Future<void> getCity(JapanStataModel value) async {
     var cities = value.city!;
     if (!mounted) return;
     setState(() {
-      _cities = cities;
+      _cities = [..._cities, ...cities];
+      print(_cities);
     });
-    return _cities;
   }
 
   void _onSelectedState(JapanStataModel value) {
     if (!mounted) return;
-    var city = const City(citycode: '', city: 'Choose City');
     setState(() {
-      _selectedCity = city;
-      _cities = [city];
       _selectedState = value;
       widget.onStateChanged(value.name!);
       getCity(value);

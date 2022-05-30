@@ -27,7 +27,7 @@ class JapanStataModel{
   }
 
   factory JapanStataModel.fromMap(Map<String, dynamic> map) {
-    final cityMaps =  map['city'] as List<Map<String, dynamic>>;
+    final cityMaps =  map['city'] as List<dynamic>;
     var city = <City>[];
     for(var f in cityMaps) {
       city.add(City.fromMap(f));

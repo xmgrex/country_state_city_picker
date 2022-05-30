@@ -1,4 +1,4 @@
-import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:country_state_city_picker/japan_state_city_picker.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,8 +25,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SelectState(
-        onCountryChanged: (v) {},
+      body: SelectJapanState(
         onStateChanged: (v) {},
         onCityChanged: (v) {},
       ),
