@@ -70,8 +70,7 @@ class _SelectJapanStateState extends State<SelectJapanState> {
     var cities = value.city!;
     if (!mounted) return;
     setState(() {
-      _cities = [..._cities, ...cities];
-      print(_cities);
+      _cities = [...[initialCity], ...cities];
     });
   }
 
@@ -80,6 +79,7 @@ class _SelectJapanStateState extends State<SelectJapanState> {
     setState(() {
       _selectedState = value;
       widget.onStateChanged(value);
+      _selectedCity = initialCity;
       getCity(value);
     });
   }
