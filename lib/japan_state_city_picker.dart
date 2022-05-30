@@ -6,6 +6,8 @@ import 'package:country_state_city_picker/src/japan_state_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+const initialState = JapanStataModel(name: '都道府県を選択');
+const initialCity = City(citycode: 'Choose City', city: '市区町村を選択');
 
 class SelectJapanState extends StatefulWidget {
   final ValueChanged<JapanStataModel> onStateChanged;
@@ -35,10 +37,10 @@ class SelectJapanState extends StatefulWidget {
 }
 
 class _SelectJapanStateState extends State<SelectJapanState> {
-  List<City> _cities = [const City(citycode: 'Choose City', city: 'Choose City')];
-  var _selectedCity  = const City(citycode: 'Choose City', city: 'Choose City');
-  var _selectedState = const JapanStataModel(name: 'Choose State/Province');
-  final List<JapanStataModel> _states = [const JapanStataModel(name: 'Choose State/Province')];
+  List<City> _cities = [initialCity];
+  var _selectedCity  = initialCity;
+  var _selectedState = initialState;
+  final List<JapanStataModel> _states = [initialState];
 
   @override
   void initState() {
