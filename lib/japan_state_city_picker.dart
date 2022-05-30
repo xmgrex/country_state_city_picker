@@ -8,9 +8,8 @@ import 'package:flutter/services.dart' show rootBundle;
 
 
 class SelectJapanState extends StatefulWidget {
-  final ValueChanged<String> onStateChanged;
-  final ValueChanged<String> onCityChanged;
-  final VoidCallback? onCountryTap;
+  final ValueChanged<JapanStataModel> onStateChanged;
+  final ValueChanged<City> onCityChanged;
   final VoidCallback? onStateTap;
   final VoidCallback? onCityTap;
   final TextStyle? style;
@@ -27,7 +26,6 @@ class SelectJapanState extends StatefulWidget {
       this.spacing = 0.0,
       this.style,
       this.dropdownColor,
-      this.onCountryTap,
       this.onStateTap,
       this.onCityTap})
       : super(key: key);
@@ -79,7 +77,7 @@ class _SelectJapanStateState extends State<SelectJapanState> {
     if (!mounted) return;
     setState(() {
       _selectedState = value;
-      widget.onStateChanged(value.name!);
+      widget.onStateChanged(value);
       getCity(value);
     });
   }
@@ -88,7 +86,7 @@ class _SelectJapanStateState extends State<SelectJapanState> {
     if (!mounted) return;
     setState(() {
       _selectedCity = value;
-      widget.onCityChanged(value.city);
+      widget.onCityChanged(value);
     });
   }
 
