@@ -26,6 +26,8 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SelectJapanState(
+        initialState: '兵庫県',
+        initialCity: '尼崎市',
         onStateChanged: (v) {},
         onCityChanged: (v) {},
       ),

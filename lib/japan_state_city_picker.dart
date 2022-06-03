@@ -12,12 +12,12 @@ const state = JapanStataModel(name: '都道府県を選択');
 const city = City(citycode: 'Choose City', city: '市区町村を選択');
 
 class SelectJapanState extends StatefulWidget {
-
-  const SelectJapanState({Key? key,
+  const SelectJapanState({
+    Key? key,
     required this.onStateChanged,
     required this.onCityChanged,
     this.decoration =
-    const InputDecoration(contentPadding: EdgeInsets.all(0.0)),
+        const InputDecoration(contentPadding: EdgeInsets.all(0.0)),
     this.spacing = 0.0,
     this.style,
     this.dropdownColor,
@@ -35,30 +35,24 @@ class SelectJapanState extends StatefulWidget {
   final Color? dropdownColor;
   final InputDecoration decoration;
   final double spacing;
-  final JapanStataModel? initialState;
-  final City? initialCity;
+  final String? initialState;
+  final String? initialCity;
 
   @override
   _SelectJapanStateState createState() => _SelectJapanStateState();
 }
 
 class _SelectJapanStateState extends State<SelectJapanState> {
-  JapanStataModel? get initialState => widget.initialState;
-
   List<City> _cities = [city];
   City? _selectedCity;
   JapanStataModel? _selectedState;
   final List<JapanStataModel> _states = [state];
 
-
   @override
   void initState() {
-    _selectedCity = widget.initialCity ?? city;
-    _selectedState = widget.initialState ?? state;
+    _selectedCity = city;
+    _selectedState = state;
     getState();
-    if (widget.initialCity != null && widget.initialState != null) {
-      getCity(widget.initialState!);
-    }
     super.initState();
   }
 
@@ -76,15 +70,30 @@ class _SelectJapanStateState extends State<SelectJapanState> {
         _states.add(JapanStataModel.fromMap(f));
       });
     }
+    if (widget.initialCity != null && widget.initialState != null) {
+      final initialState = _states.firstWhere((element) {
+        return element.name == widget.initialState;
+      });
+      final initialCity = initialState.city!.firstWhere((element) {
+        return element.city == widget.initialCity;
+      });
 
+      _selectedState = initialState;
+      _selectedCity = initialCity;
+
+      getCity(initialState);
+    }
     return _states;
   }
 
-  Future<void> getCity(JapanStataModel value) async {
+  void getCity(JapanStataModel value) {
     var cities = value.city!;
     if (!mounted) return;
     setState(() {
-      _cities = [...[city], ...cities];
+      _cities = [
+        ...[city],
+        ...cities
+      ];
     });
   }
 
@@ -115,28 +124,28 @@ class _SelectJapanStateState extends State<SelectJapanState> {
           decoration: widget.decoration,
           child: DropdownButtonHideUnderline(
               child: DropdownButton<JapanStataModel>(
-                dropdownColor: widget.dropdownColor,
-                isExpanded: true,
-                items: _states.map((JapanStataModel dropDownStringItem) {
-                  return DropdownMenuItem<JapanStataModel>(
-                    value: dropDownStringItem,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            dropDownStringItem.name!,
-                            style: widget.style,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) => _onSelectedState(value!),
-                onTap: widget.onStateTap,
-                value: _selectedState,
-              )),
+            dropdownColor: widget.dropdownColor,
+            isExpanded: true,
+            items: _states.map((JapanStataModel dropDownStringItem) {
+              return DropdownMenuItem<JapanStataModel>(
+                value: dropDownStringItem,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        dropDownStringItem.name!,
+                        style: widget.style,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+            onChanged: (value) => _onSelectedState(value!),
+            onTap: widget.onStateTap,
+            value: _selectedState,
+          )),
         ),
         SizedBox(
           height: widget.spacing,
@@ -145,28 +154,28 @@ class _SelectJapanStateState extends State<SelectJapanState> {
           decoration: widget.decoration,
           child: DropdownButtonHideUnderline(
               child: DropdownButton<City>(
-                dropdownColor: widget.dropdownColor,
-                isExpanded: true,
-                items: _cities.map((City dropDownStringItem) {
-                  return DropdownMenuItem<City>(
-                    value: dropDownStringItem,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            dropDownStringItem.city,
-                            style: widget.style,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) => _onSelectedCity(value!),
-                onTap: widget.onCityTap,
-                value: _selectedCity,
-              )),
+            dropdownColor: widget.dropdownColor,
+            isExpanded: true,
+            items: _cities.map((City dropDownStringItem) {
+              return DropdownMenuItem<City>(
+                value: dropDownStringItem,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        dropDownStringItem.city,
+                        style: widget.style,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+            onChanged: (value) => _onSelectedCity(value!),
+            onTap: widget.onCityTap,
+            value: _selectedCity,
+          )),
         ),
       ],
     );
